@@ -1,6 +1,6 @@
 # GothicIIAIDubbingScript
 
-EN
+# EN
 
 1. Install Python.
 2. Open CMD in Admin.
@@ -19,6 +19,8 @@ pip install pandas elevenlabs tkinter
 6.1 Change text API KEY and API VOICE KEY to your own ElevenLabs keys.
 7. After Generation the files will generate in .mp3 you can change them via commandline or change the format in the python script.
 
+# RU
+
 1. Установите Python.
 2. Откройте CMD от имени администратора.
 2.1. Вставьте в консоль:
@@ -36,7 +38,7 @@ pip install pandas elevenlabs tkinter
 6.1. Измените текст API KEY и API VOICE KEY на ваши собственные ключи от ElevenLabs.
 После генерации файлы будут созданы в формате .mp3. Вы можете изменить их через командную строку или изменить формат в python-скрипте.
 
-PL
+# PL
 
 1. Zainstaluj Pythona.
 2. Otwórz CMD jako administrator.
