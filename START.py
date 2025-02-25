@@ -1,4 +1,5 @@
 import os
+import re
 import uuid
 import pandas as pd
 import tkinter as tk
@@ -8,19 +9,17 @@ from elevenlabs import VoiceSettings
 import csv
 
 # Set ElevenLabs API Key
-ELEVENLABS_API_KEY = "API KEY"
-ELEVENLABS_VOICE_KEY = "VOICE KEY"
+ELEVENLABS_API_KEY = "APIKEY"
+VOICE_ID = "VOICEKEY"
 
 # Initialize ElevenLabs client
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
 
-# Function to select a folder (for the case you still want to use folder selection manually)
 def select_folder(prompt):
     root = tk.Tk()
     root.withdraw()
     return filedialog.askdirectory(title=prompt)
 
-# Function to generate TTS and save it to file using the official docs method
 def elevenlabs_text_to_speech(text, output_path, voice_id):
     try:
         response = client.text_to_speech.convert(
@@ -43,9 +42,20 @@ def elevenlabs_text_to_speech(text, output_path, voice_id):
     except Exception as e:
         print(f"❌ Failed to generate audio: {e}")
 
+def extract_sound_id(ai_output_str):
+    """
+    Extracts the sound ID from an AI_OUTPUT string.
+    Example: Given 'AI_OUTPUT(OTHER,SELF,"NON_5021_Kurt_night3_06")'
+    it returns 'NON_5021_Kurt_night3_06'.
+    """
+    match = re.search(r'"([^"]+)"', ai_output_str)
+    if match:
+        return match.group(1).strip().upper()
+    return None
+
 def read_and_filter_csv(csv_file):
     """
-    Read the CSV file line by line and keep only the rows that:
+    Reads the CSV file line by line and keeps only rows that:
       - Split into exactly 7 fields (tab-delimited)
       - Have the 6th column equal to "SUBTITLE" (case-insensitive)
     """
@@ -61,7 +71,7 @@ def read_and_filter_csv(csv_file):
 def main():
     # Set directories relative to the script
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_folder = os.path.join(script_dir, "INPUT_DUBBING")
+    input_folder = os.path.join(script_dir, "BEZI")
     output_folder = os.path.join(script_dir, "OUTPUT_DUBBING")
     csv_file = os.path.join(script_dir, "DIALOGUES.csv")
     
@@ -79,9 +89,12 @@ def main():
         if not rows:
             raise ValueError("No valid rows found in CSV file with the correct format and 'SUBTITLE' type.")
         df = pd.DataFrame(rows, columns=["col1", "col2", "col3", "sound_name", "ai_output", "type", "text"])
-        # Create a translation map with keys in uppercase for robust matching
-        translation_map = {row["sound_name"].strip().upper(): row["text"].strip() 
-                           for _, row in df.iterrows()}
+        # Create a translation map using the sound ID extracted from the AI_OUTPUT field
+        translation_map = {}
+        for _, row in df.iterrows():
+            sound_id = extract_sound_id(row["ai_output"])
+            if sound_id:
+                translation_map[sound_id] = row["text"].strip()
     except Exception as e:
         print(f"⚠️ Error reading CSV file: {e}")
         input("Press Enter to exit...")
@@ -89,29 +102,37 @@ def main():
 
     # Process files in the input folder
     for file_name in os.listdir(input_folder):
-        # Remove file extension from the name
-        name_without_ext = os.path.splitext(file_name)[0].strip()
-        lookup_name = name_without_ext.upper()  # Ensure comparison is case-insensitive
+        # Only process .wav files
+        if not file_name.lower().endswith(".wav"):
+            continue
 
-        # Apply the filter: if a filter string is provided, only process if it is contained in the name
+        # Remove file extension and normalize name
+        name_without_ext = os.path.splitext(file_name)[0].strip()
+        lookup_name = name_without_ext.upper()
+
+        # Apply filter if provided
         if filter_string and filter_string.upper() not in lookup_name:
             print(f"Skipping {file_name} because it does not contain the filter '{filter_string}'.")
             continue
 
         text = None
-        # Look for a CSV key that is a prefix of the lookup name (no extension in CSV)
-        for key in translation_map:
-            if lookup_name.startswith(key):  # Compare the name without extension
-                text = translation_map[key]
-                break
+        # Attempt to find an exact match for the sound ID
+        if lookup_name in translation_map:
+            text = translation_map[lookup_name]
+        else:
+            # Optionally, try a more flexible match if needed
+            for key in translation_map:
+                if lookup_name.startswith(key):
+                    text = translation_map[key]
+                    break
 
         if text:
-            output_file = os.path.join(output_folder, f"{name_without_ext}.mp3")  # Save without extension
+            output_file = os.path.join(output_folder, f"{name_without_ext}.mp3")
             if os.path.exists(output_file):
                 print(f"⏭️ Skipped: {output_file} (Already exists)")
                 continue
                 
-            elevenlabs_text_to_speech(text, output_file, voice_id=ELEVENLABS_VOICE_KEY)
+            elevenlabs_text_to_speech(text, output_file, VOICE_ID)
         else:
             print(f"⚠️ Warning: No translation found for {name_without_ext}")
 
