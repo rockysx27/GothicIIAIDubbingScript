@@ -16,7 +16,7 @@ pip install pandas elevenlabs tkinter
 4. 6. Skip to 'Translate Mod' or might break your translation.
 5. Rename the .csv to 'DIALOGUES.csv' and place it in the directory of the python script.
 6. Open 'START.py' in Notepad
-6. 1. Change text API KEY and API VOICE KEY to your own ElevenLabs keys.
+6. 1. Change text API KEY and API VOICE KEY to your own [ElevenLabs](https://elevenlabs.io/app/settings/api-keys).
 7. After Generation the files will generate in .mp3 you can change them via commandline or change the format in the python script.
 
 # RU
@@ -35,7 +35,7 @@ pip install pandas elevenlabs tkinter
 4. 6. Пропустите 'Translate Mod', иначе перевод может сломаться.
 5. Переименуйте .csv в 'DIALOGUES.csv' и поместите его в каталог с python-скриптом.
 6. Откройте 'START.py' в Блокноте.
-6. 1. Измените текст API KEY и API VOICE KEY на ваши собственные ключи от ElevenLabs.
+6. 1. Измените текст API KEY и API VOICE KEY на ваши собственные ключи от [ElevenLabs](https://elevenlabs.io/app/settings/api-keys).
 7. После генерации файлы будут созданы в формате .mp3. Вы можете изменить их через командную строку или изменить формат в python-скрипте.
 
 # PL
@@ -54,5 +54,5 @@ pip install pandas elevenlabs tkinter
 4. 6. Pomiń 'Translate Mod', inaczej może zepsuć twój tłumaczenie.
 5. Zmień nazwę pliku .csv na 'DIALOGUES.csv' i umieść go w katalogu z pythonowym skryptem.
 6. Otwórz 'START.py' w Notatniku.
-6. 1. Zmień tekst API KEY i API VOICE KEY na swoje własne klucze z ElevenLabs.
+6. 1. Zmień tekst API KEY i API VOICE KEY na swoje własne klucze z [ElevenLabs](https://elevenlabs.io/app/settings/api-keys).
 7. Po wygenerowaniu pliki będą zapisane w formacie .mp3. Możesz je zmienić za pomocą wiersza poleceń lub zmienić format w skrypcie Python.
