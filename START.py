@@ -12,7 +12,7 @@ from elevenlabs import VoiceSettings
 # Set ElevenLabs API Key
 ELEVENLABS_API_KEY = "API ID"
 VOICE_ID_EL = "VOICE ID"
-INPUT_DIR = "YOUR EXTRACTED FOLDER WITH UNTRANSLATED .WAV SOUNDS for a character, for examples 'CHARACTER/BEZI"
+INPUT_DIR = "YOUR EXTRACTED FOLDER WITH UNTRANSLATED .WAV SOUNDS for a character, for examples 'INPUT_DUBBING/CHARACTER/BEZI"
 
 # Initialize ElevenLabs client
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
