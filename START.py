@@ -45,9 +45,7 @@ def extract_sound_id(ai_output_str):
     return match.group(1).strip().upper() if match else None
 
 def read_and_filter_csv(csv_file):
-    """Reads the CSV file and extracts subtitle text grouped by sound ID,
-    including only those with more than one unique translation.
-    """
+    """Reads the CSV file and extracts subtitle text grouped by sound ID."""
     translation_map = {}
 
     with open(csv_file, 'r', encoding='utf-8') as f:
@@ -62,8 +60,8 @@ def read_and_filter_csv(csv_file):
                         translation_map[sound_id] = set()  # Use a set to prevent duplicates
                     translation_map[sound_id].add(text)
 
-    # ✅ Store values as lists instead of joined strings
-    return {key: sorted(value) for key, value in translation_map.items() if len(value) > 1}
+    # Convert sets to concatenated strings
+    return {key: ' '.join(sorted(value)) for key, value in translation_map.items()}
 
 def reorder_translation_map(translation_map):
     for key, value in translation_map.items():
