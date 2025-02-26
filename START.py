@@ -8,7 +8,8 @@ from elevenlabs import VoiceSettings
 import csv
 
 # Set ElevenLabs API Key
-ELEVENLABS_API_KEY = "sk_2033a66be5a825281b13282f41b14c798ea0d6f10a0f0ed1"
+ELEVENLABS_API_KEY = "API KEY"
+VOICE_ID = "VOICE KEY"
 
 # Initialize ElevenLabs client
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
@@ -132,7 +133,7 @@ def main():
                 print(f"⏭️ Skipped: {output_file} (Already exists)")
                 continue
                 
-            elevenlabs_text_to_speech(text, output_file, voice_id="inev4yJZunkUARsUFS0g")
+            elevenlabs_text_to_speech(text, output_file, voice_id=VOICE_ID)
         else:
             print(f"⚠️ Warning: No translation found for {name_without_ext}")
 
