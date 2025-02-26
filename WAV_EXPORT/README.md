@@ -16,7 +16,7 @@ pip install pydub
 
 1. Установите [FFmpeg](https://ffmpeg.org/)
 2. Откройте CMD от имени администратора.
-2.1. Вставьте в консоль:
+2. 1. Вставьте в консоль:
 pip install pydub
 3. Теперь файлы mp3 из 'OUTPUT_DUBBING' будут конвертироваться в .wav в 'WAV_EXPORT' при запуске скрипта.
 
@@ -30,7 +30,7 @@ pip install pydub
 
 1. Zainstaluj [FFmpeg](https://ffmpeg.org/)
 2. Otwórz CMD jako administrator.
-2.1. Wklej do konsoli:
+2. 1. Wklej do konsoli:
 pip install pydub
 3. Teraz pliki mp3 z 'OUTPUT_DUBBING' zostaną przekonwertowane na .wav do 'WAV_EXPORT' podczas uruchamiania skryptu.
    
