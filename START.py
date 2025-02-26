@@ -1,6 +1,5 @@
 import os
 import re
-import uuid
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
@@ -9,8 +8,7 @@ from elevenlabs import VoiceSettings
 import csv
 
 # Set ElevenLabs API Key
-ELEVENLABS_API_KEY = "APIKEY"
-VOICE_ID = "VOICEKEY"
+ELEVENLABS_API_KEY = "sk_2033a66be5a825281b13282f41b14c798ea0d6f10a0f0ed1"
 
 # Initialize ElevenLabs client
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
@@ -46,7 +44,7 @@ def extract_sound_id(ai_output_str):
     """
     Extracts the sound ID from an AI_OUTPUT string.
     Example: Given 'AI_OUTPUT(OTHER,SELF,"NON_5021_Kurt_night3_06")'
-    it returns 'NON_5021_Kurt_night3_06'.
+    it returns 'NON_5021_Kurt_night3_06' as the sound ID.
     """
     match = re.search(r'"([^"]+)"', ai_output_str)
     if match:
@@ -71,7 +69,7 @@ def read_and_filter_csv(csv_file):
 def main():
     # Set directories relative to the script
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_folder = os.path.join(script_dir, "BEZI")
+    input_folder = os.path.join(script_dir, "CHARACTERS/KURT")
     output_folder = os.path.join(script_dir, "OUTPUT_DUBBING")
     csv_file = os.path.join(script_dir, "DIALOGUES.csv")
     
@@ -94,7 +92,9 @@ def main():
         for _, row in df.iterrows():
             sound_id = extract_sound_id(row["ai_output"])
             if sound_id:
-                translation_map[sound_id] = row["text"].strip()
+                if sound_id not in translation_map:
+                    translation_map[sound_id] = []
+                translation_map[sound_id].append(row["text"].strip())
     except Exception as e:
         print(f"⚠️ Error reading CSV file: {e}")
         input("Press Enter to exit...")
@@ -118,12 +118,12 @@ def main():
         text = None
         # Attempt to find an exact match for the sound ID
         if lookup_name in translation_map:
-            text = translation_map[lookup_name]
+            text = ' '.join(translation_map[lookup_name])  # Join multiple lines into a single text block
         else:
             # Optionally, try a more flexible match if needed
             for key in translation_map:
                 if lookup_name.startswith(key):
-                    text = translation_map[key]
+                    text = ' '.join(translation_map[key])
                     break
 
         if text:
@@ -132,7 +132,7 @@ def main():
                 print(f"⏭️ Skipped: {output_file} (Already exists)")
                 continue
                 
-            elevenlabs_text_to_speech(text, output_file, VOICE_ID)
+            elevenlabs_text_to_speech(text, output_file, voice_id="inev4yJZunkUARsUFS0g")
         else:
             print(f"⚠️ Warning: No translation found for {name_without_ext}")
 
