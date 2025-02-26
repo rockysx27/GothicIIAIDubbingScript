@@ -167,56 +167,5 @@ def main():
 
     input("\n✅ All tasks completed! Press Enter to exit...")
 
-def main2():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_folder = os.path.join(script_dir, INPUT_DIR)
-    output_folder = os.path.join(script_dir, "OUTPUT_DUBBING")
-    csv_file = os.path.join(script_dir, "DIALOGUES.csv")
-    
-    
-
-    if not os.path.exists(input_folder) or not os.path.exists(output_folder) or not os.path.exists(csv_file):
-        print("⚠️ Error: One or more required files/folders are missing.")
-        input("Press Enter to exit...")
-        return
-
-    # Read and process the CSV file
-    translation_map = read_and_filter_csv(csv_file)
-    reference_map = load_reference_csv(os.path.join(script_dir,'REFERENCE.csv'))
-
-    # ✅ Get sound IDs that match files in `input_folder`
-    valid_keys = set(
-        os.path.splitext(file_name)[0].strip().upper()
-        for file_name in os.listdir(input_folder)
-        if file_name.lower().endswith(".wav")
-    )
-
-    # ✅ Filter translation_map to only keep relevant keys
-    translation_map = {key: value for key, value in translation_map.items() if key in valid_keys}
-
-    # Ask for reordering only for relevant translations
-    reorder_translation_map(translation_map, reference_map)
-
-    # Process files in the input folder
-    for file_name in os.listdir(input_folder):
-        if not file_name.lower().endswith(".wav"):
-            continue
-
-        name_without_ext = os.path.splitext(file_name)[0].strip().upper()
-
-        if name_without_ext in translation_map:
-            text = translation_map[name_without_ext]
-            output_file = os.path.join(output_folder, f"{name_without_ext}.mp3")
-
-            if os.path.exists(output_file):
-                print(f"⏭️ Skipped: {output_file} (Already exists)")
-                continue
-
-            elevenlabs_text_to_speech(text, output_file, voice_id=VOICE_ID_EL)
-        else:
-            print(f"⚠️ Warning: No translation found for {name_without_ext}")
-
-    input("\n✅ All tasks completed! Press Enter to exit...")
-
 if __name__ == "__main__":
     main()
