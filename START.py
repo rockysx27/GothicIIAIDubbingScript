@@ -11,7 +11,7 @@ from elevenlabs import VoiceSettings
 # Set ElevenLabs API Key
 ELEVENLABS_API_KEY = "API ID"
 VOICE_ID_EL = "VOICE ID"
-INPUT_DIR = "CHARACTERS/KURT"
+INPUT_DIR = "INPUT_DUBBING/[char name]"
 
 # Initialize ElevenLabs client
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
