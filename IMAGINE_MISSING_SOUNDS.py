@@ -5,7 +5,7 @@ import pandas as pd
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Path to the CSV file (assuming it's in the same directory as the script)
-csv_file = os.path.join(script_dir, 'MISSING_FILES.csv')
+csv_file = os.path.join(script_dir, 'MISSING_SOUNDS_LIST.csv')
 
 # Directory where the .wav files will be created
 output_dir = os.path.join(script_dir, 'MISSING_SOUNDS')
