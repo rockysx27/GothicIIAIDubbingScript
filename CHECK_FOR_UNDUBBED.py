@@ -7,7 +7,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 CHECK_FOLDER = os.path.join(script_dir, "ALL_CURRENT_DUBS")
 DIALOGUES_CSV = os.path.join(script_dir, "DIALOGUES.csv")
 REFERENCE_CSV = os.path.join(script_dir, "REFERENCE.csv")
-OUTPUT_CSV = os.path.join(script_dir, "MISSING_FILES.csv")
+OUTPUT_CSV = os.path.join(script_dir, "MISSING_SOUNDS_LIST.csv")
 
 def extract_sound_id(ai_output_str):
     """Extracts the sound ID from an AI_OUTPUT string."""
