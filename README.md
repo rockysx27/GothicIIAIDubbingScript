@@ -1,5 +1,12 @@
 # GothicIIAIDubbingScript
 
+What can this code do?
+
+* You can find completely undubbed scripts, in your mods.
+* Auto-dubbing for scripts (You have to set the voice manually for each character).
+* Export to wav from mp3.
+
+
 # EN
 
 1. Install Python.
