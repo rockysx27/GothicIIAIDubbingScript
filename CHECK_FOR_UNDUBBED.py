@@ -4,7 +4,7 @@ import re
 
 # Define directories relative to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
-CHECK_FOLDER = os.path.join(script_dir, "CHECK_FOR_UNDUBBED_SPEECH")
+CHECK_FOLDER = os.path.join(script_dir, "ALL_CURRENT_DUBS")
 DIALOGUES_CSV = os.path.join(script_dir, "DIALOGUES.csv")
 REFERENCE_CSV = os.path.join(script_dir, "REFERENCE.csv")
 OUTPUT_CSV = os.path.join(script_dir, "MISSING_FILES.csv")
