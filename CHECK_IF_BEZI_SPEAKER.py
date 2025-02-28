@@ -2,6 +2,7 @@ import os
 import csv
 import re
 from colorama import init, Fore
+import shutil
 
 # Initialize colorama
 init(autoreset=True)
@@ -12,6 +13,9 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # Set relative paths for CSV file and sound directory
 CSV_FILE = os.path.join(script_dir, "REFERENCE.csv")
 SOUND_DIRECTORY = os.path.join(script_dir, "CHARACTERS", "BEZI")
+MOVEMENT_FOLDER = os.path.join(script_dir, "CHARACTERS")  # Folder where sounds are moved
+MOVE_OUT_OF_FOLDER = True  # Control whether to move sounds or just print them out (True to move)
+MOVE_BEZI = False  # Control whether to move HERO/OTHER or SELF sounds
 
 def extract_ai_output_values(ai_output_str):
     """Extracts the first value (HERO, OTHER, SELF, etc.) and sound ID from AI_OUTPUT(...)"""
@@ -30,7 +34,18 @@ def get_wav_filenames(directory):
         print(f"❌ Error: Sound directory '{directory}' not found!")
         return set()
 
-def process_csv(csv_file, sound_files):
+def move_file_to_folder(file_name, src_folder, dest_folder):
+    """Moves the file from the source folder to the destination folder."""
+    src_file = os.path.join(src_folder, f"{file_name}.wav")
+    dest_file = os.path.join(dest_folder, f"{file_name}.wav")
+
+    if os.path.exists(src_file):
+        shutil.move(src_file, dest_file)
+        print(f"🔄 Moved {file_name}.wav to {dest_folder}")
+    else:
+        print(f"⚠️ File {file_name}.wav does not exist in {src_folder}")
+
+def process_csv(csv_file, sound_files, input_folder):
     """Reads the CSV and prints sound names where AI_OUTPUT starts with HERO, OTHER, or SELF."""
     if not os.path.exists(csv_file):
         print(f"❌ Error: CSV file '{csv_file}' not found!")
@@ -73,6 +88,17 @@ def process_csv(csv_file, sound_files):
     for sound in self_sounds:
         print(f"    {Fore.RED}- {sound}{Fore.RESET}")
 
+    # Move HERO/OTHER or SELF sounds based on the MOVE_BEZI flag
+    if MOVE_OUT_OF_FOLDER:
+        if MOVE_BEZI:
+            # Move HERO/OTHER sounds to the movement folder
+            for sound in hero_other_sounds:
+                move_file_to_folder(sound, input_folder, MOVEMENT_FOLDER)
+        else:
+            # Move SELF sounds to the movement folder
+            for sound in self_sounds:
+                move_file_to_folder(sound, input_folder, MOVEMENT_FOLDER)
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     input_folder = os.path.join(script_dir, SOUND_DIRECTORY)
@@ -91,7 +117,7 @@ def main():
     print(f"📂 Total sounds in folder: {total_sounds}")
 
     # Process CSV and count sounds linked to HERO, OTHER, or SELF
-    process_csv(CSV_FILE, sound_files)
+    process_csv(CSV_FILE, sound_files, input_folder)
 
     input("\n✅ All tasks completed! Press Enter to exit...")
 
