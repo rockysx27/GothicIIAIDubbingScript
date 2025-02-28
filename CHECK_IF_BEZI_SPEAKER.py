@@ -10,11 +10,12 @@ init(autoreset=True)
 # Get the directory where the script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Set relative paths for CSV file and sound directory
+# Set relative paths for CSV files and sound directory
 CSV_FILE = os.path.join(script_dir, "REFERENCE.csv")
+DIALOGUES_FILE = os.path.join(script_dir, "DIALOGUES.csv")  # Second CSV for fallback
 SOUND_DIRECTORY = os.path.join(script_dir, "CHARACTERS", "BEZI")
 MOVEMENT_FOLDER = os.path.join(script_dir, "CHARACTERS")  # Folder where sounds are moved
-MOVE_OUT_OF_FOLDER = True  # Control whether to move sounds or just print them out (True to move)
+MOVE_OUT_OF_FOLDER = False  # Control whether to move sounds or just print them out (True to move)
 MOVE_BEZI = False  # Control whether to move HERO/OTHER or SELF sounds
 
 def extract_ai_output_values(ai_output_str):
@@ -44,6 +45,22 @@ def move_file_to_folder(file_name, src_folder, dest_folder):
         print(f"🔄 Moved {file_name}.wav to {dest_folder}")
     else:
         print(f"⚠️ File {file_name}.wav does not exist in {src_folder}")
+
+def check_in_csv(csv_file, sound_id):
+    """Checks if the sound_id exists in the given CSV file."""
+    try:
+        with open(csv_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                fields = line.strip().split('\t')
+                if len(fields) < 7:
+                    continue  # Skip malformed lines
+                trace_value = fields[4]  # AI_OUTPUT(...) column
+                first_value, sound_id_csv = extract_ai_output_values(trace_value)
+                if sound_id == sound_id_csv:
+                    return True
+    except FileNotFoundError:
+        print(f"❌ Error: CSV file '{csv_file}' not found!")
+    return False
 
 def process_csv(csv_file, sound_files, input_folder):
     """Reads the CSV and prints sound names where AI_OUTPUT starts with HERO, OTHER, or SELF."""
